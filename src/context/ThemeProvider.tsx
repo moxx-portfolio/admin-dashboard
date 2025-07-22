@@ -1,6 +1,5 @@
 "use client"
 
-import { Popover } from "@/components/ui/popover"
 import { createContext, ReactNode, useContext, useEffect, useState } from "react"
 
 type Theme = "system" | "light" | "dark"
@@ -21,7 +20,6 @@ interface ProviderProps {
 const ThemeProvider = ({ children }: ProviderProps) => {
 	const [theme, setTheme] = useState<Theme>("system")
 
-	// применяем тему
 	const applyTheme = (theme: Theme) => {
 		if (typeof window === "undefined") return
 		const element = document.documentElement
@@ -36,19 +34,16 @@ const ThemeProvider = ({ children }: ProviderProps) => {
 				break
 			case "system":
 			default:
-				prefersDark
-					? element.classList.add("dark")
-					: element.classList.remove("dark")
+				if (prefersDark) element.classList.add("dark")
+				else element.classList.remove("dark")
 				break
 		}
 	}
 
-	// при загрузке — применить system
 	useEffect(() => {
 		applyTheme(theme)
 	}, [theme])
 
-	// слушать изменения системной темы (если выбрана system)
 	useEffect(() => {
 		if (theme !== "system") return
 
