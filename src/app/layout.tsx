@@ -36,7 +36,7 @@ export default function RootLayout({
           enableSystem
         >
           {children}
-          <ThemeSwitcherDebug />
+          {/* <ThemeSwitcherDebug /> */}
           <Toaster />
         </ThemeProvider>
       </body>
