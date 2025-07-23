@@ -4,6 +4,7 @@ import { useTheme } from "next-themes"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Sun, Moon, Monitor } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useEffect, useState } from "react"
 
 const themes = [
 	{ id: "light", label: "Light", icon: Sun },
@@ -13,8 +14,13 @@ const themes = [
 
 export default function ThemeSwitcherDebug() {
 	const { theme, setTheme } = useTheme()
+	const [mounted, setMounted] = useState(false)
 
-	if (process.env.NODE_ENV !== "development") return null
+	useEffect(() => {
+		setMounted(true)
+	}, [])
+
+	if (process.env.NODE_ENV !== "development" || !mounted) return null
 
 	return (
 		<div className="fixed bottom-4 right-4 z-50">
