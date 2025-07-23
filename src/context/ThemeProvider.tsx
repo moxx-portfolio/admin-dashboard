@@ -1,67 +1,10 @@
 "use client"
 
-import { createContext, ReactNode, useContext, useEffect, useState } from "react"
+import * as React from "react"
+import { ThemeProvider as NextThemesProvider } from "next-themes"
 
-type Theme = "system" | "light" | "dark"
-interface ContextValue {
-	theme: Theme
-	changeTheme: (theme: Theme) => void
+const ThemeProvider = ({ children, ...props }: React.ComponentProps<typeof NextThemesProvider>) => {
+	return <NextThemesProvider {...props}>{children}</NextThemesProvider>
 }
-
-const ThemeContext = createContext<ContextValue>({
-	theme: "system",
-	changeTheme: () => { }
-})
-
-interface ProviderProps {
-	children: ReactNode
-}
-
-const ThemeProvider = ({ children }: ProviderProps) => {
-	const [theme, setTheme] = useState<Theme>("system")
-
-	const applyTheme = (theme: Theme) => {
-		if (typeof window === "undefined") return
-		const element = document.documentElement
-		const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches
-
-		switch (theme) {
-			case "light":
-				element.classList.remove("dark")
-				break
-			case "dark":
-				element.classList.add("dark")
-				break
-			case "system":
-			default:
-				if (prefersDark) element.classList.add("dark")
-				else element.classList.remove("dark")
-				break
-		}
-	}
-
-	useEffect(() => {
-		applyTheme(theme)
-	}, [theme])
-
-	useEffect(() => {
-		if (theme !== "system") return
-
-		const media = window.matchMedia("(prefers-color-scheme: dark)")
-		const handler = () => applyTheme("system")
-		media.addEventListener("change", handler)
-		return () => media.removeEventListener("change", handler)
-	}, [theme])
-
-	const changeTheme = (theme: Theme) => setTheme(theme)
-
-	return (
-		<ThemeContext.Provider value={{ theme, changeTheme }}>
-			{children}
-		</ThemeContext.Provider>
-	)
-}
-
-export const useTheme = () => useContext(ThemeContext)
 
 export default ThemeProvider

@@ -1,6 +1,6 @@
 "use client"
 
-import { useTheme } from "@/context/ThemeProvider"
+import { useTheme } from "next-themes"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Sun, Moon, Monitor } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -12,7 +12,7 @@ const themes = [
 ] as const
 
 export default function ThemeSwitcherDebug() {
-	const { theme, changeTheme } = useTheme()
+	const { theme, setTheme } = useTheme()
 
 	if (process.env.NODE_ENV !== "development") return null
 
@@ -32,7 +32,7 @@ export default function ThemeSwitcherDebug() {
 							<Button
 								key={id}
 								variant={theme === id ? "default" : "ghost"}
-								onClick={() => changeTheme(id)}
+								onClick={() => setTheme(id)}
 								className="w-full justify-start gap-2"
 							>
 								<Icon className="w-4 h-4" />
